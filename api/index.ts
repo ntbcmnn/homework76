@@ -1,13 +1,13 @@
 import express from 'express';
 import cors from 'cors';
-import chatRouter from "./routers/chat";
+import messagesRouter from './routers/messages';
 
 const app = express();
 const port = 8000;
 
 app.use(cors());
 app.use(express.json());
-app.use('/', chatRouter);
+app.use('/', messagesRouter);
 
 const run: () => Promise<void> = async () => {
     app.listen(port, () => {
