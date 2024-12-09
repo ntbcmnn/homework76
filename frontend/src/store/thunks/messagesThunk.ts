@@ -10,14 +10,6 @@ export const fetchMessages = createAsyncThunk<IMessage[], void>
   }
 );
 
-export const getMessagesByDate = createAsyncThunk<IMessage[], string>(
-  'messages/getMessagesByDate',
-  async (datetime: string) => {
-    const response = await axiosApi.get<IMessage[]>(`/messages?datetime=${datetime}`);
-    return response.data;
-  }
-);
-
 export const createMessage = createAsyncThunk<void, IMessageMutation>(
   'messages/createMessage',
   async (message: IMessage) => {
