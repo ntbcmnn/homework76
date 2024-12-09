@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { IMessage } from '../../types';
 import { RootState } from '../../app/store.ts';
-import { createMessage, fetchMessages, getMessagesByDate } from '../thunks/messagesThunk.ts';
+import { createMessage, fetchMessages } from '../thunks/messagesThunk.ts';
 
 interface IMessagesState {
   messages: IMessage[];
@@ -31,9 +31,9 @@ const messagesSlice = createSlice({
         state.fetching = true;
         state.error = false;
       })
-      .addCase(fetchMessages.fulfilled, (state, action: PayloadAction<IMessage[]>) => {
+      .addCase(fetchMessages.fulfilled, (state, { payload: items }) => {
         state.fetching = false;
-        state.messages = action.payload;
+        state.messages = items;
       })
       .addCase(fetchMessages.rejected, (state) => {
         state.fetching = false;
@@ -48,18 +48,6 @@ const messagesSlice = createSlice({
       })
       .addCase(createMessage.rejected, (state) => {
         state.creating = false;
-        state.error = true;
-      })
-      .addCase(getMessagesByDate.pending, (state) =>{
-        state.fetching = true;
-        state.error = false;
-      })
-      .addCase(getMessagesByDate.fulfilled, (state, action: PayloadAction<IMessage[]>) =>{
-        state.fetching = false;
-        state.messages = action.payload;
-      })
-      .addCase(getMessagesByDate.rejected, (state) =>{
-        state.fetching = false;
         state.error = true;
       });
   }
