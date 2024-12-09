@@ -1,10 +1,9 @@
 import Grid from '@mui/material/Grid2';
 import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
+import { useAppSelector } from '../../app/hooks.ts';
 import { CircularProgress, IconButton, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { selectCreateLoading } from '../../store/slices/messagesSlice.ts';
-import { createMessage, fetchMessages } from '../../store/thunks/messagesThunk.ts';
 import { IMessageMutation } from '../../types';
 import { toast } from 'react-toastify';
 
@@ -13,9 +12,12 @@ const initialState = {
   message: '',
 };
 
-const Form = () => {
+interface Props {
+  onFormSubmit: (message: IMessageMutation) => void;
+}
+
+const Form: React.FC<Props> = ({onFormSubmit}) => {
   const [form, setForm] = useState<IMessageMutation>({...initialState});
-  const dispatch = useAppDispatch();
   const isCreating: boolean = useAppSelector(selectCreateLoading);
 
   const onSubmitForm: (e: React.FormEvent) => Promise<void> = async (e: React.FormEvent) => {
@@ -26,10 +28,9 @@ const Form = () => {
       return;
     }
 
-    await dispatch(createMessage({...form}));
+    onFormSubmit({...form});
     setForm({...initialState});
     toast.success('Message added successfully!');
-    dispatch(fetchMessages());
   };
 
   const onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (e: React.ChangeEvent<HTMLInputElement>) => {
