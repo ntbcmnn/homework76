@@ -17,10 +17,10 @@ messagesRouter.get('/', async (req, res) => {
             }
 
             const messages: IMessage[] = await fileDb.getMessagesByDate(date);
-            res.send(messages.length ? messages.slice(0, 30) : []);
+            res.send(messages.length ? messages.slice(-30) : []);
         } else {
             const messages: IMessage[] = await fileDb.getMessages();
-            res.send(messages.length ? messages.slice(0, 30) : []);
+            res.send(messages.length ? messages.slice(-30) : []);
         }
     } catch (e) {
         console.error(e);
